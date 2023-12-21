@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>wallpaper generator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300&family=Podkova:wght@800&family=Teko&display=swap"
+    rel="stylesheet" />
+</head>
+
+<body>
+  <div>Hey, this is the website that renders your wallpaper :)</div>
+  <div id="canvascontainer"></div>
+  <div style="visibility: hidden">
+    <div style="font-family: Podkova">kslkfjslkdjf</div>
+    <div style="font-family: Teko">माघ klsjdf</div>
+    <div style="font-family: Fira Code">HEllOOL</div>
+  </div>
+
+  <script src="dateGet.js"></script>
+  <script src="nepaliDateGet.js"></script>
+  <script src="SimpleCanvasLayout.js"></script>
+  <script src="utils.js"></script>
+  <script src="layout.js"></script>
+  <script>
+    document.fonts.ready.then((fontFaceSet) => {
+      const layoutEngine = new SimpleCanvasLayout(document.getElementById("canvascontainer"), {
+        width: 1470,
+        height: 956,
+        background: "red",
+      });
+
+      // do some custom things with the canvas background to hide the mac air notch
+      const notchHeight = 36;
+      const ctx = layoutEngine.ctx;
+
+      let image = new Image();
+      image.src = "bgwallpaper.jpg"
+      image.onload = () => {
+        ctx.drawImage(image, -100, notchHeight, image.width / 2.1, image.height / 2.1);
+
+        ctx.fillStyle = "black";
+        ctx.fillRect(0, 0, layoutEngine.width, notchHeight);
+
+        // all this to do the rounded rectangle effect
+        // because safari doesn't fill shapes with hole properly
+        // todo:probably make this a general function later
+
+        const arcRadius = 20;
+        ctx.translate(0, notchHeight)
+        ctx.beginPath()
+        ctx.arc(arcRadius, arcRadius, arcRadius, 3 * Math.PI / 2, Math.PI, true)
+        ctx.lineTo(0, 0);
+        ctx.lineTo(arcRadius, 0)
+        ctx.fill()
+
+        ctx.translate(layoutEngine.width, 0)
+        ctx.beginPath()
+        ctx.arc(- arcRadius, arcRadius, arcRadius, 0, 3 * Math.PI / 2, true)
+        ctx.lineTo(0, 0);
+        ctx.lineTo(0, arcRadius)
+        ctx.fill()
+        ctx.translate(-layoutEngine.width, -notchHeight)
+
+        ctx.translate(0, layoutEngine.height)
+        ctx.beginPath()
+        ctx.arc(arcRadius, -arcRadius, arcRadius, Math.PI, Math.PI / 2, true)
+        ctx.lineTo(0, 0);
+        ctx.lineTo(0, arcRadius)
+        ctx.fill()
+
+        ctx.translate(layoutEngine.width, 0)
+        ctx.beginPath()
+        ctx.arc(-arcRadius, -arcRadius, arcRadius, 0, Math.PI / 2, false)
+        ctx.lineTo(0, 0);
+        ctx.lineTo(0, -arcRadius)
+        ctx.fill()
+
+        ctx.translate(-layoutEngine.width, -layoutEngine.height)
+
+        createLayout(layoutEngine)
+
+        var dataURL = layoutEngine.canvas.toDataURL("image/png");
+        var link = document.createElement("a");
+        link.download = "finalsize.png";
+        link.href = dataURL;
+        link.click();
+
+      }
+    });
+  </script>
+</body>
+
+</html>
