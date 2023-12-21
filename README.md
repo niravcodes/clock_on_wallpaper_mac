@@ -1,6 +1,6 @@
-# Wallpaper with Time and Date
+# Clock on Wallpaper (Mac)
 
-Small Mac utility to display time and date on the desktop wallpaper.
+A small Mac utility to display time and date on the desktop wallpaper.
 
 ![screenshot of the wallpaper](./screenshot.png)
 
